@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="KAIRO-ZYNEX WhatsApp pairing portal">
+<title>KAIRO-ZYNEX  Pairing Portal</title>
+<style>
+:root{
+ --bg:#000;--bg2:#080808;--panel:#0b0b0b;--panel2:#111;--line:#2a2a2a;
+ --text:#fff;--muted:#bdbdbd;--cyan:#ff1a1a;--violet:#d40000;--pink:#ff3030;
+ --orange:#ff3b3b;--green:#42e08c;--danger:#ff3030;
+ --glow:0 0 35px rgba(255,179,71,.10),0 20px 70px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#000;
+ color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+button,input{font:inherit}button{touch-action:manipulation}
+.app{min-height:100vh;display:flex}
+.sidebar{position:fixed;z-index:10;left:0;top:0;bottom:0;width:250px;padding:22px 15px;background:rgba(24,9,12,.92);
+ border-right:1px solid var(--line);backdrop-filter:blur(22px);display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:11px;padding:5px 9px 25px;font-weight:900;letter-spacing:.6px}
+.brand img{width:42px;height:42px;border-radius:13px;object-fit:cover;box-shadow:0 0 26px rgba(255,59,141,.30)}
+.brand small{display:block;color:var(--muted);font-size:10px;font-weight:600;margin-top:2px}
+.nav-title{font-size:10px;color:#8e6964;letter-spacing:1.8px;font-weight:800;padding:8px 11px}
+.nav{display:grid;gap:6px}.nav button{border:1px solid transparent;background:transparent;color:#c9aaa2;text-align:left;
+ padding:11px 12px;border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:750}
+.nav button:hover,.nav button.active{background:linear-gradient(90deg,rgba(255,59,141,.18),rgba(255,122,47,.08));border-color:#5d2630;color:#fff}
+.nav svg{width:18px;height:18px}.servers{margin-top:8px;display:grid;gap:8px}
+.server{border:1px solid var(--line);background:#18090c;border-radius:13px;padding:10px;display:flex;align-items:center;gap:9px}
+.server .led{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(66,224,140,.7)}
+.server b{font-size:12px}.server span{display:block;font-size:9px;color:#9b7771;margin-top:2px}
+.side-foot{margin-top:auto;color:#6e647b;font-size:10px;padding:12px}
+.main{margin-left:250px;width:calc(100% - 250px);padding:25px 28px 45px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1100px;margin:0 auto 26px}
+.mobile-menu{display:none}.crumb{color:#9b7771;font-size:11px}.status{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;
+ border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;background:rgba(255,255,255,.025)}
+.dot{width:7px;height:7px;border-radius:50%;background:#687080}.dot.live{background:var(--green);box-shadow:0 0 13px rgba(54,245,139,.75)}
+.content{max-width:1100px;margin:auto}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:25px;align-items:center;padding:25px 0 30px}
+.badge{display:inline-flex;gap:8px;align-items:center;padding:7px 10px;border:1px solid #3c2a53;border-radius:999px;background:rgba(139,92,246,.08);color:#ffd7c9;font-size:10px;font-weight:850;letter-spacing:.7px}
+.badge i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+h1{font-size:clamp(36px,6vw,70px);line-height:.98;margin:17px 0 13px;letter-spacing:-3px}
+.gradient{background:linear-gradient(100deg,#fff7f3 5%,#ffb347 38%,#ff6a3d 72%,#ff7a2f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:650px;color:var(--muted);line-height:1.75;font-size:14px}
+.hero-card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(25,17,42,.92),rgba(12,8,21,.94));border-radius:25px;padding:20px;box-shadow:var(--glow)}
+.hero-card .mini{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #3b171e}
+.hero-card .mini:last-child{border:0}.mini b{font-size:12px}.mini span{font-size:10px;color:var(--muted)}
+.panel{background:linear-gradient(145deg,rgba(20,14,34,.96),rgba(11,8,19,.98));border:1px solid var(--line);border-radius:25px;padding:22px;box-shadow:var(--glow)}
+.card-head{display:flex;gap:13px;align-items:center;margin-bottom:19px}.icon{width:45px;height:45px;display:grid;place-items:center;border-radius:14px;
+ background:linear-gradient(135deg,rgba(255,59,141,.20),rgba(255,179,71,.10));color:#ffd1c3;border:1px solid #5a252d}
+.icon svg{width:22px;height:22px}.card-head h2{font-size:18px;margin:0 0 3px}.sub{font-size:11px;color:var(--muted)}
+label{display:block;color:#d9d1e5;font-size:12px;font-weight:800;margin:0 0 8px}
+.input-wrap{display:flex;align-items:center;border:1px solid #57252c;background:#12070a;border-radius:15px;overflow:hidden}
+.input-wrap:focus-within{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(255,122,47,.10)}
+.prefix{padding-left:14px;color:#a98780;font-size:14px}input{width:100%;padding:15px 14px;border:0;outline:0;background:transparent;color:#fff;font-size:15px}
+input::placeholder{color:#765852}
+.btn{position:relative;overflow:hidden;width:100%;border:1px solid #fff;border-radius:15px;margin-top:13px;padding:15px 16px;color:#d40000;font-weight:950;cursor:pointer;
+ background:#fff;box-shadow:0 10px 28px rgba(255,255,255,.10);transition:.18s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(255,255,255,.16)}
+.btn:active{transform:scale(.985)}.btn:disabled{opacity:.55;cursor:not-allowed}.btn.secondary{background:#111;color:#fff;box-shadow:none;border-color:#555}
+.result{display:none;margin-top:18px;padding:18px;border-radius:17px;background:#12070a;border:1px solid var(--line)}.result.show{display:block}
+.result-title{font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:1px}.code{font-size:clamp(27px,8vw,38px);font-weight:950;letter-spacing:6px;text-align:center;padding:13px 8px;
+ color:#fff;background:linear-gradient(90deg,rgba(255,59,141,.14),rgba(255,179,71,.10));border-radius:14px;user-select:text}
+.instructions{margin:13px 0 0;color:#c0a19a;font-size:11px;line-height:1.7}.message{margin-top:13px;font-size:11px;color:var(--muted);min-height:18px}
+.message.error{color:#ff8298}.message.ok{color:#70e6a0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:17px}.feature{padding:16px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.018)}
+.feature svg{width:20px;height:20px;color:var(--cyan);margin-bottom:9px}.feature b{display:block;font-size:12px}.feature span{display:block;color:var(--muted);font-size:10px;line-height:1.5;margin-top:4px}
+.footer{text-align:center;color:#80615d;font-size:10px;margin-top:30px}.social{display:flex;justify-content:center;gap:9px;margin-top:12px}.social a{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:11px;color:#b9958b;background:#18090c;transition:.18s}
+.social svg{width:17px;height:17px}
+.social a:hover{transform:translateY(-2px)}
+.social a.tg:hover{color:#fff;background:#229ED9;border-color:#229ED9;box-shadow:0 8px 20px rgba(34,158,217,.35)}
+.social a.wa:hover{color:#fff;background:#25D366;border-color:#25D366;box-shadow:0 8px 20px rgba(37,211,102,.35)}
+.social a.yt:hover{color:#fff;background:#FF0000;border-color:#FF0000;box-shadow:0 8px 20px rgba(255,0,0,.35)}
+@media(max-width:850px){.sidebar{width:215px}.main{margin-left:215px;width:calc(100% - 215px);padding:20px}.hero{grid-template-columns:1fr}.hero-card{display:none}}
+.sidebar-close{display:none}
+.overlay{display:none;position:fixed;inset:0;background:rgba(4,2,3,.6);backdrop-filter:blur(2px);z-index:9;opacity:0;transition:.25s}
+.overlay.show{display:block;opacity:1}
+@media(max-width:650px){.sidebar{position:fixed;transform:translateX(-105%);transition:.25s;width:250px;box-shadow:30px 0 70px rgba(0,0,0,.5)}.sidebar.open{transform:translateX(0)}.main{margin-left:0;width:100%;padding:15px 13px 35px}.mobile-menu{display:grid;place-items:center;width:39px;height:39px;border:1px solid var(--line);background:#1b090d;color:#fff;border-radius:11px}.topbar{margin-bottom:10px}.hero{padding:20px 0 22px}.features{grid-template-columns:1fr}.feature{display:flex;gap:12px;align-items:flex-start}.feature svg{margin:0}.panel{padding:18px;border-radius:20px}.sidebar-close{display:grid;place-items:center;width:32px;height:32px;margin-left:auto;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:9px}}
+
+.nav button[data-section="servers"],.nav button[data-section="status"],.nav button[data-section="docs"]{cursor:pointer}
+.info-section{display:none;margin-top:18px}
+.info-section.show{display:block;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.info-card{padding:17px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.025)}
+.info-card b{display:block;font-size:13px;margin-bottom:5px}.info-card span{font-size:10px;color:var(--muted);line-height:1.6}
+.server.clickable{cursor:pointer;transition:.18s}.server.clickable:hover,.server.clickable.active{border-color:#ff6a3d;background:linear-gradient(135deg,rgba(255,59,141,.12),rgba(255,179,71,.08));transform:translateY(-1px)}
+.server.clickable .server-action{margin-left:auto;font-size:9px;color:#ffb347}
+@media(max-width:650px){.info-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><img src="https://files.catbox.moe/xs0ree.png" alt="KAIRO ZYNEX"><div>KAIRO ZYNEX<small>PAIRING CONTROL CENTER</small></div><button class="sidebar-close" id="sidebarClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></div>
+  <div class="nav-title">CONTROL</div>
+  <div class="nav">
+    <button class="active" data-section="pairing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 11.5a8.3 8.3 0 0 1-8.5 8.3 8.6 8.6 0 0 1-4-.98L4 20l1.25-3.3A8.1 8.1 0 0 1 3.5 11.5a8.3 8.3 0 1 1 16.5 0Z"/></svg> Pairing</button>
+    <button data-section="servers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none"/><circle cx="7" cy="17" r="1" fill="currentColor" stroke="none"/></svg> Servers</button>
+    <button data-section="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l2 8 4-16 2 8h6"/></svg> Bot Status</button>
+    <button data-section="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg> Commands</button>
+  </div>
+  <div class="nav-title">SERVERS</div>
+  <div class="servers">
+    <div class="server clickable active" data-server="Server 1"><i class="led"></i><div><b>Server 1</b><span>Primary • Active</span></div><strong class="server-action">SELECT</strong></div>
+    <div class="server clickable" data-server="Server 2"><i class="led"></i><div><b>Server 2</b><span>Secondary • Demo</span></div><strong class="server-action">SELECT</strong></div>
+    <div class="server clickable" data-server="Server 3"><i class="led"></i><div><b>Server 3</b><span>Backup • Demo</span></div><strong class="server-action">SELECT</strong></div>
+  </div>
+  <div class="side-foot">© 2026 KAIRO DEV<br>WhatsApp Pairing Portal</div>
+</aside>
+<div class="overlay" id="sidebarOverlay"></div>
+
+<main class="main">
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px"><button class="mobile-menu" id="mobileMenu" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="19" height="19"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button><div class="crumb">CONTROL CENTER / PAIRING</div></div>
+  <div class="status"><span id="dot" class="dot"></span><span id="statusText">Ready</span></div>
+</header>
+
+<div class="content">
+<section class="hero">
+  <div>
+    <div class="badge"><i></i> WHATSAPP PAIRING • SECURE SESSION</div>
+    <h1><span class="gradient">Connect your<br>KAIEO - ZYNEX</span></h1>
+    <p>Generate a WhatsApp pairing code from a clean, futuristic control center. Fast pairing, live connection status and a responsive interface built for mobile and desktop.</p>
+  </div>
+  <div class="hero-card">
+    <div class="mini"><div><b>Pairing Engine</b><span>Baileys</span></div><strong>ONLINE</strong></div>
+    <div class="mini"><div><b>Server 1</b><span>Primary endpoint</span></div><strong>●</strong></div>
+    <div class="mini"><div><b>Security</b><span>Session protected</span></div><strong>ACTIVE</strong></div>
+  </div>
+</section>
+
+<section class="panel" id="pairing">
+  <div class="card-head">
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 11.5a8.3 8.3 0 0 1-8.5 8.3 8.6 8.6 0 0 1-4-.98L4 20l1.25-3.3A8.1 8.1 0 0 1 3.5 11.5a8.3 8.3 0 1 1 16.5 0Z"/><path d="M8.5 9.2c.2 2.1 2.1 4 4.2 4.3l1.2-1.1 1.7.7c.2.1.3.3.2.5-.4 1.2-1.2 1.7-2.4 1.4-3.2-.8-5.6-3.2-6.4-6.4-.3-1.2.2-2 1.4-2.4.2-.1.4 0 .5.2l.7 1.7-1.1 1.1Z"/></svg></div>
+    <div><h2>WhatsApp Pairing</h2><div class="sub">Enter your number with country code</div></div>
+  </div>
+  <label for="phone">WhatsApp number</label>
+  <div class="input-wrap"><span class="prefix">+</span><input id="phone" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="509 xxx xxx"></div>
+  <button id="pairBtn" class="btn">⚡ Generate Pairing Code</button>
+  <div id="result" class="result"><div class="result-title">YOUR PAIRING CODE</div><div id="code" class="code">----</div>
+    <div class="instructions">Open WhatsApp → Settings → Linked devices → Link a device → Link with phone number, then enter this code.</div>
+    <button id="copyBtn" class="btn secondary">Copy Code</button>
+  </div>
+  <div id="message" class="message"></div>
+</section>
+
+<section class="panel info-section" id="servers">
+  <div class="card-head"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none"/><circle cx="7" cy="17" r="1" fill="currentColor" stroke="none"/></svg></div><div><h2>Server Control</h2><div class="sub">Choose a server profile for the pairing interface.</div></div></div>
+  <div class="info-grid">
+    <div class="info-card"><b>Server 1</b><span>Primary pairing profile • Active</span></div>
+    <div class="info-card"><b>Server 2</b><span>Secondary profile • Coming soon</span></div>
+    <div class="info-card"><b>Server 3</b><span>Backup profile • Coming soon</span></div>
+  </div>
+  <div id="serverMessage" class="message ok">Selected: Server 1</div>
+</section>
+
+<section class="panel info-section" id="status">
+  <div class="card-head"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l2 8 4-16 2 8h6"/></svg></div><div><h2>Bot Status</h2><div class="sub">Live status of this pairing portal.</div></div></div>
+  <div class="info-grid">
+    <div class="info-card"><b>Socket</b><span id="socketState">Checking…</span></div>
+    <div class="info-card"><b>Pairing Engine</b><span>Baileys • Ready</span></div>
+    <div class="info-card"><b>Selected Server</b><span id="selectedServer">Server 1</span></div>
+  </div>
+</section>
+
+<section class="panel info-section" id="docs">
+  <div class="card-head"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><div><h2>Commands</h2><div class="sub">LIST OF TOP COMMANDS</div></div></div>
+  <div class="info-grid">
+    <div class="info-card"><b>PAIR &lt;number&gt;</b><span>Start the pairing flow with your WhatsApp number.</span></div>
+    <div class="info-card"><b>TOOLS / ADMIN</b><span>Manage group admin permissions.</span></div>
+    <div class="info-card"><b>FEATURES</b><span>Guide to open commands</span></div>
+  </div>
+</section>
+
+<section class="features">
+ <div class="feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.7-3 8.2-7 10-4-1.8-7-5.3-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg><div><b>Secure</b><span>Protected session flow with live status.</span></div></div>
+ <div class="feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg><div><b>Fast</b><span>Pair your WhatsApp account in seconds.</span></div></div>
+ <div class="feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M9 12.5 11 15l4-5"/></svg><div><b>Baileys</b><span>Powered by the WhatsApp Web protocol.</span></div></div>
+</section>
+<footer class="footer"><div>© Powered by Druzz  |  Support: https://syrix-vision.xyz</div><div class="social">
+<a class="tg" href="https://t.me/addlist/nFJALsujo7tjZWEx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.6 2.7 11.1c-1.3.5-1.3 1.2-.2 1.6l4.9 1.5 1.9 5.8c.2.6.4.8.9.8.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l3.2-15.2c.4-1.4-.4-1.9-1.6-1.4Zm-4.4 3.9L9 14.4l-.4 3.6-1.6-4.9 12.4-7.4c.3-.2.6-.1.4.2Z"/></svg></a>
+<a class="wa" href="https://whatsapp.com/channel/0029Vb8Wxx7Jf05mIp8NEU0w" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.4c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.5-.3Z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2Zm0 18.1c-1.6 0-3.1-.4-4.5-1.2l-.3-.2-3.2.8.9-3.1-.2-.3A8.1 8.1 0 0 1 3.9 12c0-4.5 3.6-8.1 8.1-8.1s8.1 3.6 8.1 8.1-3.6 8.1-8.1 8.1Z"/></svg></a>
+<a class="yt" href="https://www.youtube.com/@druzz_dev1" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5c-.3-.9-1-1.6-1.9-1.9C19 4.7 12 4.7 12 4.7s-7 0-8.7.4c-.9.3-1.6 1-1.9 1.9C1 8.6 1 12 1 12s0 3.4.4 5c.3.9 1 1.6 1.9 1.9 1.7.4 8.7.4 8.7.4s7 0 8.7-.4c.9-.3 1.6-1 1.9-1.9.4-1.6.4-5 .4-5Zm-13.5 3.2V8.8L15.8 12l-6.3 3.2Z"/></svg></a>
+</div></footer>
+</div>
+</main>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket=io({transports:['websocket','polling']});
+const phone=document.getElementById('phone'),pairBtn=document.getElementById('pairBtn'),result=document.getElementById('result'),codeEl=document.getElementById('code'),copyBtn=document.getElementById('copyBtn'),message=document.getElementById('message'),dot=document.getElementById('dot'),statusText=document.getElementById('statusText');
+let currentUser='';
+function cleanNumber(v){return String(v||'').replace(/\D/g,'').slice(0,15)}
+function setMessage(text,type=''){message.textContent=text;message.className='message '+type}
+phone.addEventListener('input',()=>{phone.value=cleanNumber(phone.value);if(currentUser!==phone.value){result.classList.remove('show');codeEl.textContent='----'}});
+phone.addEventListener('keydown',e=>{if(e.key==='Enter')pairBtn.click()});
+pairBtn.addEventListener('click',()=>{
+ const n=cleanNumber(phone.value);
+ if(!/^\d{8,15}$/.test(n)){setMessage('Enter a valid WhatsApp number with country code.','error');phone.focus();return}
+ currentUser=n;pairBtn.disabled=true;pairBtn.innerHTML='⏳ Generating Pairing Code…';setMessage('Connecting to the pairing service…');result.classList.remove('show');
+ socket.emit('set-user',n);socket.emit('pair-request',{userId:n,number:n});
+});
+socket.on('pairing-code',code=>{codeEl.textContent=code||'----';result.classList.add('show');pairBtn.disabled=false;pairBtn.innerHTML='⚡ Generate Pairing Code';setMessage('Pairing code generated. Enter it in WhatsApp.','ok')});
+socket.on('pairing-error',err=>{pairBtn.disabled=false;pairBtn.innerHTML='⚡ Generate Pairing Code';setMessage(String(err||'Pairing failed. Try again.'),'error')});
+socket.on('connection-status',data=>{if(!data||data.user!==currentUser)return;if(data.connected){dot.classList.add('live');statusText.textContent='Connected';setMessage('WhatsApp is connected to KAIRO -ZYNEX.','ok');pairBtn.disabled=true;pairBtn.innerHTML='✓ Already Connected'}else{dot.classList.remove('live');statusText.textContent='Ready';pairBtn.disabled=false;pairBtn.innerHTML='⚡ Generate Pairing Code'}});
+socket.on('connect',()=>{dot.classList.add('live');statusText.textContent='Online';const ss=document.getElementById('socketState');if(ss)ss.textContent='Online';if(currentUser)socket.emit('set-user',currentUser)});
+socket.on('disconnect',()=>{dot.classList.remove('live');statusText.textContent='Offline';const ss=document.getElementById('socketState');if(ss)ss.textContent='Offline'});
+copyBtn.addEventListener('click',async()=>{const code=codeEl.textContent.trim();if(!code||code==='----')return;try{await navigator.clipboard.writeText(code);copyBtn.textContent='Copied ✓';setTimeout(()=>copyBtn.textContent='Copy Code',1400)}catch{setMessage('Copy failed. Select the code manually.','error')}});
+const sidebarEl=document.getElementById('sidebar'),overlayEl=document.getElementById('sidebarOverlay');
+function openSidebar(){sidebarEl.classList.add('open');overlayEl.classList.add('show')}
+function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.classList.remove('show')}
+document.getElementById('mobileMenu').addEventListener('click',()=>{sidebarEl.classList.contains('open')?closeSidebar():openSidebar()});
+document.getElementById('sidebarClose').addEventListener('click',closeSidebar);
+overlayEl.addEventListener('click',closeSidebar);
+const navSections=['pairing','servers','status','docs'];
+function showSection(name){
+  navSections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('show', id===name);
+  });
+  const pairing=document.getElementById('pairing');
+  if(name==='pairing') pairing.classList.add('show');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.section===name));
+  document.querySelector('.crumb').textContent='CONTROL CENTER / '+name.toUpperCase();
+  document.getElementById(name).scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.querySelectorAll('.nav button').forEach(btn=>btn.addEventListener('click',()=>{showSection(btn.dataset.section);closeSidebar();}));
+document.querySelectorAll('.server.clickable').forEach(card=>card.addEventListener('click',()=>{
+  document.querySelectorAll('.server.clickable').forEach(c=>c.classList.remove('active'));
+  card.classList.add('active');
+  const selected=card.dataset.server;
+  const sm=document.getElementById('serverMessage'); if(sm) sm.textContent='Selected: '+selected;
+  const ss=document.getElementById('selectedServer'); if(ss) ss.textContent=selected;
+  setMessage(selected+' selected.','ok');
+}));
+document.querySelectorAll('img').forEach(img=>img.addEventListener('dragstart',e=>e.preventDefault()));
+</script>
+</body>
+</html>
